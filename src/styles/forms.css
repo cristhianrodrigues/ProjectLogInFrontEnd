@@ -1,0 +1,120 @@
+body {
+    background-color:#e5e5e5;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.card {
+    display: flex;
+    justify-content: end;
+    width: 70vw;
+    min-height: 900px;
+    border-radius: 20px 22px 22px 20px;
+    background-image: url('../assets/imgs/login-img.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.form-template {
+    display: flex;
+    flex-direction: column;
+    max-width: 456px;
+    height: 100%;
+    background-color: #ffffff;
+    border-radius: 0 20px 20px 0;
+    gap: 50px;
+    padding: 50px 40px;
+}
+
+.logo-icon {
+    size: 10px;
+    width: 150px;
+    height: 50px;
+}
+
+.form-template h2 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    word-break: break-word;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group div{
+    display: flex;
+    flex-direction: column;
+    font-family: 'Roboto', sans-serif;
+    gap: 20px;
+}
+
+.form-group input {
+    padding: 10px 20px;
+    height: 50px;
+    border: 1px solid #e5e5e5;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    font-family: 'Roboto', sans-serif;
+    color: #000000;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #7839ee;
+}
+
+/* show password */
+
+.password-input-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.visibilidade {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+}
+
+.form-group button {
+    margin-top: 50px;
+    padding: 10px 20px;
+    height: 50px;
+    border: none;
+    border-radius: 5px;
+    background-color: #7839ee;
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.horizontal-bar {
+    width: 100%;
+    height: 1px;
+    background-color: #e0e0e0;
+}
+
+.form-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    color: #000000;
+}
