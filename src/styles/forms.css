@@ -68,12 +68,10 @@ body {
     color: #000000;
 }
 
-.form-group input:focus {
+/* .form-group input:focus {
     outline: none;
     border-color: #7839ee;
-}
-
-/* show password */
+} */
 
 .password-input-container {
     position: relative;
@@ -117,4 +115,26 @@ body {
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
     color: #000000;
+}
+
+.form-default-style input:focus {
+    outline: none;
+    border-color: #7839ee;
+}
+
+
+.form-error-style input {
+    border: 1px solid #ee3939;
+}
+
+.form-error-style input:focus{
+    outline: none;
+    border-color: #ee3939;
+}
+
+.errorMenssage {
+    margin: -10px 0px 0px 0px;
+    top: 100px;
+    right: 15px;
+    color: #ee3939;
 }

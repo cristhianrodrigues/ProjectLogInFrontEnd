@@ -10,10 +10,20 @@ interface SignupForm {
     password: string;
 };
 
+interface SingupErrorInformation {
+    errors: {
+        nome?: string;
+        email?: string;
+        password?: string;
+    };
+    errorState: boolean;
+};
+
 
 const Singup = () => {
 
     const [formData, setFormData] = useState<SignupForm>({email: "", password: "", nome: ""});
+    const [errorNotification, setErrorNotification] = useState<SingupErrorInformation>({errors: {}, errorState: false})
     const [inputVisibility, setInputVisibility] = useState(false);
 
     const navigate = useNavigate();
@@ -28,11 +38,14 @@ const Singup = () => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        
-        if(formData.password.length < 6){
-            console.log("senha tem que ter pelo menos 6 caracteres");
-        }
 
+        const newError: SingupErrorInformation['errors'] = {};
+
+        if (!formData.nome.trim()) {
+            newError.nome = "Nome é obrigatório";
+        }
+        
+        
         try {
             const response = await fetch('http://localhost:8080/auth/registrar', {
                 method: 'POST',
@@ -43,23 +56,44 @@ const Singup = () => {
             });
 
             const data = await response.json();
-            console.log('Cadastro bem-sucedido', data);
 
-        } catch (error) {
+            console.log(data, response);
+
+            if ( data?.success === false) {
+                if (response.status === 403 && response.statusText === "Forbidden" && (data.error === "Email já cadastrado!" || data.error === "Formato do Email inválido!")) {
+                    newError.email = data.error;
+                }
+            }
+
+            if (response.status === 201) {
+                console.log('Cadastro bem-sucedido!', data, response);
+                navigate('/login')
+            };
+
+        } catch (error ) {
             if (error instanceof Error) {
                 console.error(error?.message);
             } else {
                 console.error('Ocorreu um erro desconhecido');
             }
-        }finally {
-            navigate('/login')
+        }
+
+        if (formData.password.length < 6){
+            newError.password = "A senha deve ter pelo menos 6 caracteres!"
+        }
+
+        if (Object.keys(newError).length > 0) {
+            setErrorNotification({
+                errors: newError,
+                errorState: true
+            });
         }
 
     };
 
     const toggleVisibility = () => {
         setInputVisibility(!inputVisibility);
-    }
+    };
 
     return (
         <div className="container">
@@ -68,7 +102,7 @@ const Singup = () => {
                     <img className="logo-icon" src={logoIcon} alt="" />
                     <h2>Cadastre uma conta para ter acesso.</h2>
                     <form className="form-group" onSubmit={handleSubmit}>
-                        <div>
+                        <div className={`${errorNotification.errors.nome ? "form-error-style" : "form-default-style"}`}>
                             <label htmlFor="name">Nome</label>
                             <input
                                 type="text"
@@ -78,8 +112,8 @@ const Singup = () => {
                                 required
                             />
                         </div>
-                        <div>
-                            <label htmlFor="email">Email</label>
+                        <div className={`email-container ${errorNotification.errors.email ? "form-error-style" : "form-default-style"}`}>
+                            <label htmlFor="email form-error">Email</label>
                             <input
                                 type="text"
                                 name="email"
@@ -87,8 +121,9 @@ const Singup = () => {
                                 onChange={handleInputChange}
                                 required
                             />
+                            {errorNotification.errors.email && <p className="errorMenssage">{errorNotification.errors.email}</p> }
                         </div>
-                        <div>
+                        <div className={`${errorNotification.errors.password ? "form-error-style" : "form-default-style"}`}>
                             <label htmlFor="password">Senha</label>
                             <div className="password-input-container">
                                 <input
@@ -105,6 +140,7 @@ const Singup = () => {
                                     alt="Mostrar senha" 
                                     onClick={toggleVisibility} 
                                 />
+                                {errorNotification.errors.password && <p className="errorMenssage">{errorNotification.errors.password}</p> }
                             </div>
                         </div>
                         <button type="submit">Entrar</button>
