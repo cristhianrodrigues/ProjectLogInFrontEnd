@@ -41,7 +41,7 @@ const Login = () => {
             });
 
             if (!response.ok) {
-                throw new Error('Email ou senha');
+                throw new Error('Email ou senha inválido!');
             }
 
             const data = await response.json();
@@ -51,9 +51,12 @@ const Login = () => {
 
         } catch (err) {
             if (err instanceof Error) {
+                if(err.message === 'Failed to fetch') {
+                   return setError('Ocorreu um erro desconhecido, tente outra vez mais tarde!');
+                };
                 setError(err.message);
             } else {
-                setError('Ocorreu um erro desconhecido');
+                setError('Ocorreu um erro desconhecido, tente outra vez mais tarde!');
             }
         } finally {
             setLoading(false);
@@ -71,7 +74,7 @@ const Login = () => {
                     <img className="logo-icon" src={logoIcon} alt="" />
                     <h2>Entre com seu login para continuar.</h2>
                     <form className="form-group" onSubmit={handleSubmit}>
-                        <div>
+                        <div className={`${error ? "form-error-style" : "form-default-style"}`}>
                             <label htmlFor="email">Login</label>
                             <input
                                 type="text"
@@ -84,7 +87,7 @@ const Login = () => {
                         </div>
                         <div>
                             <label htmlFor="password">Senha</label>
-                            <div className="password-input-container">
+                            <div className={`password-input-container ${error ? "form-error-style" : "form-default-style"}`}>
                                 <input
                                     type={inputVisibility ? "text" : "password"}
                                     name="password"
@@ -100,10 +103,11 @@ const Login = () => {
                                     onClick={toggleVisibility} 
                                 />
                             </div>
+                            
+                        {error && <p className="errorMenssage">{error}</p>}
                         </div>
                         <button type="submit" disabled={loading}>Entrar</button>
                     </form>
-                    {error && <p className="error">{error}</p>}
                     <div className="horizontal-bar"></div>
                     <div className="form-footer">
                         <p>Não tem conta? <a href="/signup">Crie uma aqui!</a></p>
